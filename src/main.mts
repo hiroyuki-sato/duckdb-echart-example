@@ -160,13 +160,30 @@ if (delButton) {
 // plot data
 ///////////////////////////////////////////////////
 async function doPlot(): Promise<void> {
-  // TODO
-  console.log('All files deleted');
+  const file = 'score1.csv'
+  const root = await navigator.storage.getDirectory();
+  const handle = await root.getFileHandle(file);
+  console.log(handle);
+  await db.registerFileHandle('input', handle);
+
+  const conn = await db.connect();
+  // read file
+  //const fh = await handle.getFile();
+  //const text = await fh.text();
+  //console.log(text);
+  //await conn.query("PRAGMA reload_files();");
+
+
+  const result = await conn.query(`select * from read_csv('input');`);
+  console.log(result.toArray());
+  console.log(result.toString());
+
+  console.log("plot button");
+  console.log(result)
 }
 
 const plotButton = document.querySelector<HTMLButtonElement>('#plot');
 if (plotButton) {
-    console.log("plot button");
-    //listButton.addEventListener('click', clearOPFS);
+    plotButton.addEventListener('click', doPlot);
 }
 
