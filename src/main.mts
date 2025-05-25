@@ -164,18 +164,21 @@ async function doPlot(): Promise<void> {
   const root = await navigator.storage.getDirectory();
   const handle = await root.getFileHandle(file);
   console.log(handle);
-  await db.registerFileHandle('input', handle);
-
-  const conn = await db.connect();
-  // read file
-  //const fh = await handle.getFile();
-  //const text = await fh.text();
-  //console.log(text);
+  const fh = await handle.getFile();
+  const text = await fh.text();
+  console.log(text);
   //await conn.query("PRAGMA reload_files();");
+  //await db.registerFileHandle('input', handle);
+  //await db.registerFileHandle('input', text);
+  await db.registerFileText('input', text)
+
+  //const conn = await db.connect();
+  // read file
+  //console.log(text);
 
 
-  const result = await conn.query(`select * from read_csv('input');`);
-  console.log(result.toArray());
+  const result = await conn.query(`select * from read_csv_auto('input');`);
+  console.log(result.toArray()[0].count);
   console.log(result.toString());
 
   console.log("plot button");
