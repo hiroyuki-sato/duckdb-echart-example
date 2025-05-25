@@ -140,3 +140,33 @@ if (listButton) {
     console.log("click test");
     listButton.addEventListener('click', listOPFSFiles);
 }
+
+///////////////////////////////////////////////////
+// remove all files
+///////////////////////////////////////////////////
+async function clearOPFS(): Promise<void> {
+  const root = await navigator.storage.getDirectory();
+  // TODO
+  console.log('All files deleted');
+}
+
+const delButton = document.querySelector<HTMLButtonElement>('#delete');
+if (delButton) {
+    console.log("del button");
+    listButton.addEventListener('click', clearOPFS);
+}
+
+///////////////////////////////////////////////////
+// plot data
+///////////////////////////////////////////////////
+async function doPlot(): Promise<void> {
+  // TODO
+  console.log('All files deleted');
+}
+
+const plotButton = document.querySelector<HTMLButtonElement>('#plot');
+if (plotButton) {
+    console.log("plot button");
+    //listButton.addEventListener('click', clearOPFS);
+}
+
