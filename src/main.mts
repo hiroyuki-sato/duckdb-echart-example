@@ -90,3 +90,53 @@ const option = {
 };
 
 myChart.setOption(option);
+
+///////////////////////////////////////////////////
+// Upload file
+///////////////////////////////////////////////////
+
+async function uploadFileToOPFS(): Promise<void> {
+
+    const [fileHandle] = await window.showOpenFilePicker();
+    const file = await fileHandle.getFile();
+
+    const opfsRoot = await navigator.storage.getDirectory();
+
+    const opfsFileHandle = await opfsRoot.getFileHandle(file.name, { create: true });
+    const writable = await opfsFileHandle.createWritable();
+
+    await writable.write(file);
+    await writable.close();
+
+    console.log(`Save file: ${file.name}`);
+}
+
+
+const button = document.querySelector<HTMLButtonElement>('#upload');
+if (button) {
+    console.log("click test");
+    button.addEventListener('click', uploadFileToOPFS);
+}
+
+///////////////////////////////////////////////////
+// ls file
+///////////////////////////////////////////////////
+
+async function listOPFSFiles(): Promise<void> {
+  const root = await navigator.storage.getDirectory();
+
+  console.log('list OPFS files');
+  for await (const [name, handle] of root.entries()) {
+    if (handle.kind === 'file') {
+      console.log(`F ${name}`);
+    } else if (handle.kind === 'directory') {
+      console.log(`D ${name}/`);
+    }
+  }
+}
+
+const listButton = document.querySelector<HTMLButtonElement>('#list');
+if (listButton) {
+    console.log("click test");
+    listButton.addEventListener('click', listOPFSFiles);
+}
