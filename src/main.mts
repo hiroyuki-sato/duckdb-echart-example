@@ -59,12 +59,25 @@ await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
 
 
 const VERSION_SQL = "SELECT version() AS version;";
+//const INSTALL_EXCEL = "INSTALL 'excel';"
 const conn = await db.connect()
 //await conn.query(VERSION_SQL)
+
+//const result = await conn.query(INSTALL_EXCEL);
+//console.log(result);
 
 const version = await db.getVersion();
 console.log("duckdb version");
 console.log(version);
+
+//result = await conn.query("LOAD 'excel';")
+//result = await conn.query("PRAGMA show_plugins;")
+//const result2 = await db.getVersion();
+//console.log("PRAGMA show_plugins");
+//console.log("load excel");
+//console.log(result);
+
+
 
 /////////////////////////////////////////////////////////
 /// echarts
