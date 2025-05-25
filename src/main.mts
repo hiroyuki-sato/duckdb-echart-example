@@ -2,6 +2,8 @@ import './style.css'
 import typescriptLogo from './typescript.svg'
 import viteLogo from '/vite.svg'
 import { setupCounter } from './counter.mts'
+// echart
+import * as echarts from 'echarts';
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>
@@ -63,3 +65,28 @@ const conn = await db.connect()
 const version = await db.getVersion();
 console.log("duckdb version");
 console.log(version);
+
+/////////////////////////////////////////////////////////
+/// echarts
+/////////////////////////////////////////////////////////
+
+const chartDom = document.getElementById('chart')!;
+const myChart = echarts.init(chartDom);
+
+const option = {
+  title: {
+    text: 'ECharts 入門'
+  },
+  tooltip: {},
+  xAxis: {
+    data: ['A', 'B', 'C']
+  },
+  yAxis: {},
+  series: [{
+    name: 'スコア',
+    type: 'bar',
+    data: [5, 20, 36]
+  }]
+};
+
+myChart.setOption(option);
