@@ -66,8 +66,14 @@ const version = await db.getVersion();
 console.log("duckdb version");
 console.log(version);
 
+//Error: IO Error: Extension https://nightly-extensions.duckdb.org/v1.3.0/wasm_eh/excel.duckdb_extension.wasm is not available
+//await conn.query(`
+//  INSTALL excel FROM core_nightly;
+//  LOAD excel;
+//`);
+
 await conn.query(`
-  INSTALL excel FROM core_nightly;
+  INSTALL excel;
   LOAD excel;
 `);
 
