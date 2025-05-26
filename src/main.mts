@@ -67,15 +67,16 @@ console.log("duckdb version");
 console.log(version);
 
 //Error: IO Error: Extension https://nightly-extensions.duckdb.org/v1.3.0/wasm_eh/excel.duckdb_extension.wasm is not available
-//await conn.query(`
-//  INSTALL excel FROM core_nightly;
-//  LOAD excel;
-//`);
-
 await conn.query(`
-  INSTALL excel;
+  INSTALL excel FROM core_nightly;
   LOAD excel;
 `);
+
+//await conn.query(`
+//  INSTALL excel;
+//  LOAD excel;
+//`);
+await conn.close()
 
 
 /////////////////////////////////////////////////////////
@@ -172,33 +173,38 @@ if (delButton) {
 // plot data
 ///////////////////////////////////////////////////
 async function doPlot(): Promise<void> {
-  const file = 'data.xlsx'
-  const root = await navigator.storage.getDirectory();
-  const handle = await root.getFileHandle(file);
-  //console.log(handle);
-  //const fh = await handle.getFile();
-  //const text = await fh.text();
-  //console.log(text);
-  //await conn.query("PRAGMA reload_files();");
-  await db.registerFileHandle('input', handle);
-  //await db.registerFileHandle('input', handle, duckdb.DuckDBDataProtocol.BROWSER_FSACCESS, true);
-  //await db.registerFileURL('input', 'opfs://data.xlsx');
-  //await db.registerFileHandle('input', text);
-  //await db.registerFileText('input', text)
+  try {
+    const conn = await db.connect()
+    const file = 'data.xlsx'
+    const root = await navigator.storage.getDirectory();
+    const handle = await root.getFileHandle(file);
 
-  //const conn = await db.connect();
-  // read file
-  //console.log(text);
+    console.log("plot button");
+    //console.log(handle);
+    //const fh = await handle.getFile();
+    //const text = await fh.text();
+    //console.log(text);
+    //await conn.query("PRAGMA reload_files();");
+    await db.registerFileHandle('data.xlsx', handle);
+    //await db.registerFileHandle('input', handle, duckdb.DuckDBDataProtocol.BROWSER_FSACCESS, true);
+    //await db.registerFileURL('input', 'opfs://data.xlsx');
+    //await db.registerFileHandle('input', text);
+    //await db.registerFileText('input', text)
 
+    //const result = await conn.query(`select * from read_csv_auto('input');`);
+    //const result = await conn.query(`select * from read_xlsx('input');`);
+    const result = await conn.query(`select * from read_xlsx('data.xlsx');`);
+    console.log(result.toArray()[0].count);
+    console.log(result.toString());
 
-  //const result = await conn.query(`select * from read_csv_auto('input');`);
-  //const result = await conn.query(`select * from read_xlsx('input');`);
-  const result = await conn.query(`select * from read_xlsx('input');`);
-  console.log(result.toArray()[0].count);
-  console.log(result.toString());
-
-  console.log("plot button");
-  console.log(result)
+    console.log(result)
+  } catch (error) {
+    console.log("Error --------------", error);
+  } finally {
+    console.log("Finally called");
+    await db.dropFile('data.xlsx');
+    await conn.close();
+  }
 }
 
 const plotButton = document.querySelector<HTMLButtonElement>('#plot');
