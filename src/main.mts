@@ -66,6 +66,12 @@ const version = await db.getVersion();
 console.log("duckdb version");
 console.log(version);
 
+await conn.query(`
+  INSTALL excel FROM core_nightly;
+  LOAD excel;
+`);
+
+
 /////////////////////////////////////////////////////////
 /// echarts
 /////////////////////////////////////////////////////////
