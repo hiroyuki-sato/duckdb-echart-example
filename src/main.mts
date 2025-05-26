@@ -160,24 +160,28 @@ if (delButton) {
 // plot data
 ///////////////////////////////////////////////////
 async function doPlot(): Promise<void> {
-  const file = 'score1.csv'
+  const file = 'data.xlsx'
   const root = await navigator.storage.getDirectory();
   const handle = await root.getFileHandle(file);
-  console.log(handle);
-  const fh = await handle.getFile();
-  const text = await fh.text();
-  console.log(text);
+  //console.log(handle);
+  //const fh = await handle.getFile();
+  //const text = await fh.text();
+  //console.log(text);
   //await conn.query("PRAGMA reload_files();");
-  //await db.registerFileHandle('input', handle);
+  await db.registerFileHandle('input', handle);
+  //await db.registerFileHandle('input', handle, duckdb.DuckDBDataProtocol.BROWSER_FSACCESS, true);
+  //await db.registerFileURL('input', 'opfs://data.xlsx');
   //await db.registerFileHandle('input', text);
-  await db.registerFileText('input', text)
+  //await db.registerFileText('input', text)
 
   //const conn = await db.connect();
   // read file
   //console.log(text);
 
 
-  const result = await conn.query(`select * from read_csv_auto('input');`);
+  //const result = await conn.query(`select * from read_csv_auto('input');`);
+  //const result = await conn.query(`select * from read_xlsx('input');`);
+  const result = await conn.query(`select * from read_xlsx('input');`);
   console.log(result.toArray()[0].count);
   console.log(result.toString());
 
