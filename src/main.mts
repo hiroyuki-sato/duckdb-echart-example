@@ -145,15 +145,15 @@ if (listButton) {
 // remove all files
 ///////////////////////////////////////////////////
 async function clearOPFS(): Promise<void> {
-  const root = await navigator.storage.getDirectory();
-  // TODO
+  // https://developer.mozilla.org/ja/docs/Web/API/File_System_API/Origin_private_file_system
+  await (await navigator.storage.getDirectory()).remove({ recursive: true });
   console.log('All files deleted');
 }
 
 const delButton = document.querySelector<HTMLButtonElement>('#delete');
 if (delButton) {
     console.log("del button");
-    listButton.addEventListener('click', clearOPFS);
+    delButton.addEventListener('click', clearOPFS);
 }
 
 ///////////////////////////////////////////////////
