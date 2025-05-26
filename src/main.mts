@@ -174,32 +174,31 @@ if (delButton) {
 ///////////////////////////////////////////////////
 async function doPlot(): Promise<void> {
   try {
+    console.log("plot button");
+
     const conn = await db.connect()
     const file = 'data.xlsx'
     const root = await navigator.storage.getDirectory();
     const handle = await root.getFileHandle(file);
 
-    console.log("plot button");
-    //console.log(handle);
-    //const fh = await handle.getFile();
-    //const text = await fh.text();
-    //console.log(text);
-    //await conn.query("PRAGMA reload_files();");
-    await db.registerFileHandle('data.xlsx', handle);
-    //await db.registerFileHandle('input', handle, duckdb.DuckDBDataProtocol.BROWSER_FSACCESS, true);
-    //await db.registerFileURL('input', 'opfs://data.xlsx');
-    //await db.registerFileHandle('input', text);
-    //await db.registerFileText('input', text)
+    console.log("read contents");
+    const fobj = await handle.getFile();
+    console.log("File Size", fobj.size);
+    const buffer = await fobj.arrayBuffer();
+    console.log("Buffer: ", buffer.byteLength);
+    const u8array = new Uint8Array(buffer);
+    console.log(u8array);
 
-    //const result = await conn.query(`select * from read_csv_auto('input');`);
-    //const result = await conn.query(`select * from read_xlsx('input');`);
+    await db.registerFileBuffer('data.xlsx', new Uint8Array(buffer));
+
+    console.log("before query");
     const result = await conn.query(`select * from read_xlsx('data.xlsx');`);
     console.log(result.toArray()[0].count);
     console.log(result.toString());
 
     console.log(result)
   } catch (error) {
-    console.log("Error --------------", error);
+    console.log("doPost Error: ", error);
   } finally {
     console.log("Finally called");
     await db.dropFile('data.xlsx');
