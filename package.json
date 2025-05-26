@@ -13,7 +13,7 @@
     "vite": "^6.0.1"
   },
   "dependencies": {
-    "@duckdb/duckdb-wasm": "^1.29.0",
+    "@duckdb/duckdb-wasm": "^1.29.1-dev132.0",
     "echarts": "^5.6.0"
   }
 }
