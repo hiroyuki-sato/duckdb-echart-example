@@ -197,6 +197,28 @@ async function doPlot(): Promise<void> {
     console.log(result.toString());
 
     console.log(result)
+
+    console.log(result.getChild('Name').toArray());
+    console.log(Array.from(result.getChild('Score')!.toArray()));
+
+    const option = {
+      title: {
+        text: 'ECharts 入門'
+      },
+      tooltip: {},
+      xAxis: {
+        data: result.getChild('Name')!.toArray()
+      },
+      yAxis: {},
+      series: [{
+        name: 'スコア',
+        type: 'bar',
+        data: Array.from(result.getChild('Score')!.toArray())
+      }]
+    };
+
+    myChart.setOption(option);
+
   } catch (error) {
     console.log("doPost Error: ", error);
   } finally {
